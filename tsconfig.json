@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+      "module": "CommonJS",
+      "target": "ES2016",
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "strict": true,
+      "noEmit": false,
+      "sourceMap": true,
+      "outDir": "dist",
+    },
+    "lib": ["es2015"]
+  }
+  
