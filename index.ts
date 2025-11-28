@@ -2,12 +2,11 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import "dotenv/config";
 import { connectToDatabase } from "./src/shared/db/connect"
-import { PORT } from "./src/config/env";
 import auth from "./src/modules/auth";
 import requests from "./src/modules/requests";
 
 const app = express();
-const port = PORT || 3000;
+const port = process.env.PORT || 3000;
 
 
 app.use(express.json());
