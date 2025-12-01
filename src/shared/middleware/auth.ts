@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Response } from "express";
 import jwt from "jsonwebtoken";
 import { getCollection } from "../db/connect";
 import { IUserType } from "../../modules/auth/types/user";

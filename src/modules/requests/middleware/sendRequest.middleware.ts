@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { z } from "zod";
 
-const customerSchema = z.object({
+export const customerSchema = z.object({
     customerId: z.string().min(1, { message: "Customer ID is required" }),
 
     name: z.string().min(3, { message: "Name must be at least 3 characters" }).max(100, { message: "Name must be at most 100 characters" }),
@@ -21,13 +21,10 @@ const customerSchema = z.object({
         },
         { message: "Date must be in the future" },
     ),
-
     timeSlot: z
         .string()
         .min(1, { message: "Time slot is required" })
-        .regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]-([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, {
-            message: "Time slot must be in format HH:MM-HH:MM (e.g., 10:00-12:00)",
-        }),
+        .regex(/^([01]\d|2[0-3]):([0-5]\d)$/, { message: "Time must be in 24-hour format HH:MM (e.g., 14:30)" }),
 });
 
 export const sendRequestValidation = (req: Request, res: Response, next: NextFunction): void => {

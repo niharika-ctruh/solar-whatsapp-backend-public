@@ -1,16 +1,5 @@
 import mongoose, { Document } from "mongoose";
 
-// Visit Request Schema
-export interface IVisitRequest {
-    customerId: string;
-    consultantId: mongoose.Schema.Types.ObjectId;
-    date: Date;
-    timeSlot: string;
-    status: "pending" | "accepted" | "rejected" | "cancelled" | "completed";
-    notes?: string;
-    requestId: string;
-}
-
 export interface IHost extends Document {
     hostSseId: string;
     name: string;
@@ -25,7 +14,8 @@ export interface IHost extends Document {
         fullAddress: string;
     };
     available: boolean;
-    visitRequests: Array<{  // Changed to Array
+    visitRequests: Array<{
+        // Changed to Array
         requestId: mongoose.Schema.Types.ObjectId;
         status: "pending" | "accepted" | "rejected" | "cancelled" | "completed";
     }>;
