@@ -1,9 +1,9 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
 import "dotenv/config";
-import { connectToDatabase } from "./src/shared/db/connect"
-import auth from "./src/modules/auth";
-import requests from "./src/modules/requests";
+import { connectToDatabase } from "./shared/db/connect"
+import auth from "./modules/auth";
+import requests from "./modules/requests";
 
 const app = express();
 const port = process.env.PORT || 3000;
