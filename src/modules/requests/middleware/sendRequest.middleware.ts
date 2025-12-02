@@ -14,7 +14,7 @@ export const customerSchema = z.object({
         .max(200, { message: "Address cannot exceed 200 characters" }),
 
     date: z.iso.datetime({ message: "Date must be a valid ISO 8601 datetime string" }).refine(
-        (dateStr: string) => {
+        dateStr => {
             const requestDate = new Date(dateStr);
             const now = new Date();
             return requestDate > now;

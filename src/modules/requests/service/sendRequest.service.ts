@@ -121,6 +121,8 @@ const buildBaseMatch = (filters: VisitRequestFilters) => {
             matchStage.status = { $in: ["pending", "visit_scheduled", "visit_rescheduled"] };
         } else if (filters.status === "past") {
             matchStage.status = { $in: ["completed", "cancelled"] };
+        } else if (filters.status === "scheduled") {
+            matchStage.status = { $in: ["visit_scheduled", "visit_rescheduled"] };
         } else {
             matchStage.status = filters.status;
         }

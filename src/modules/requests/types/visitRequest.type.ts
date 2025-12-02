@@ -4,7 +4,7 @@ import { ICustomerDocument } from "./customer.type";
 export interface VisitRequestFilters {
     date?: string;
     name?: string;
-    status?: "pending" | "completed" | "cancelled" | "visit_scheduled" | "visit_rescheduled" | "open" | "past";
+    status?: "pending" | "completed" | "cancelled" | "visit_scheduled" | "visit_rescheduled" | "open" | "past" | "scheduled";
 }
 
 // Visit Request Schema
