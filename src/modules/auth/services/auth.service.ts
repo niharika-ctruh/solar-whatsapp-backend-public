@@ -27,7 +27,9 @@ export const createUser = async (body: IUserType) => {
 
         await newUser.save();
 
-        const token = jwt.sign({ id: newUser?._id, email: newUser?.email, token: newUser?.role }, JWT_SECRET as string, { expiresIn: "6h" });
+        const token = jwt.sign({ id: newUser?._id.toString(), email: newUser?.email, token: newUser?.role }, JWT_SECRET as string, {
+            expiresIn: "6h",
+        });
 
         return {
             _id: newUser?._id,
@@ -48,7 +50,7 @@ export const login = async (body: IUserType) => {
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
         if (!isPasswordCorrect) throw new Errors("Password is incorrect", 401);
 
-        const token = jwt.sign({ id: user._id, email: user.email, role: user.role }, JWT_SECRET as string, { expiresIn: "6h" });
+        const token = jwt.sign({ id: user._id.toString(), email: user.email, role: user.role }, JWT_SECRET as string, { expiresIn: "6h" });
 
         return {
             _id: user._id,
@@ -65,7 +67,7 @@ export const requestPasswordReset = async (email: string) => {
         if (!user) throw new Errors("User does not exist, please sign up", 404);
 
         const secret = JWT_SECRET + user.password;
-        const token = jwt.sign({ id: user._id, email: user.email }, secret, {
+        const token = jwt.sign({ id: user._id.toString(), email: user.email }, secret, {
             expiresIn: `${parseInt(process.env.OTP_VALIDITY_IN_MINS || "30", 10)}m`,
         });
 

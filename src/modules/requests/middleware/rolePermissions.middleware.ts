@@ -18,8 +18,7 @@ export const validateRoleAndPermissions = (req: Request, res: Response, next: Ne
         if (!JWT_SECRET) {
             throw new Error("JWT_SECRET is not defined in environment variables");
         }
-        const decoded = jwt.verify(token, JWT_SECRET) as IUserType;
-        req.user = decoded; // attach user to request
+        const decoded = jwt.verify(token, JWT_SECRET) as { role: IUserType["role"] };
 
         const allowedFields = rolePermissions[decoded.role];
         const invalidFields = Object.keys(req.body).filter(field => !allowedFields.includes(field as keyof IVisitRequest));

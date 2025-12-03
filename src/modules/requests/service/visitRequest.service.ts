@@ -236,15 +236,7 @@ export const getVisitRequestById = async ({ id }: { id: string }) => {
     return result[0];
 };
 
-export const updateVisitRequestById = async ({
-    id,
-    body,
-    user,
-}: {
-    id: string;
-    body: Partial<IVisitRequest>;
-    user: { _id: IUserType["_id"]; role: IUserType["role"] };
-}) => {
+export const updateVisitRequestById = async ({ id, body, user }: { id: string; body: Partial<IVisitRequest>; user: IUserType }) => {
     const existingRequest = await VisitRequest.findById(id);
     if (!existingRequest) throw new Errors("Request not found", 404);
 

@@ -49,7 +49,7 @@ export const handleGetVisitRequestById = async (req: Request, res: Response) => 
 export const handleUpdateVisitRequest = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
-        const user = req.user as { _id: IUserType["_id"]; role: IUserType["role"] };
+        const user = req.user as IUserType;
         const request = await updateVisitRequestById({ id, body: req.body, user });
         res.status(200).json({ message: "Request updated successfully", data: request });
     } catch (error) {
