@@ -23,5 +23,8 @@ export const {
     DB_NAME,
     ENCRYPTION_KEY,
     WHATSAPP_TOKEN,
-    PHONE_NUMBER_ID
+    PHONE_NUMBER_ID,
+    GUPSHUP_API_KEY,
+    GUPSHUP_APP_NAME,
+    GUPSHUP_MOBILE_NUMBER,
 } = process.env;

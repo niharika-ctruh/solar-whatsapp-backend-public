@@ -20,5 +20,5 @@ export interface IRequestBody {
     coordinates: [Double];
     address: String;
     date: Date;
-    timeSlot:string;
+    timeSlot: string;
 }

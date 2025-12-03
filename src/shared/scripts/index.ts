@@ -45,7 +45,7 @@ function mapToHost(row: any) {
             fullAddress: row["Address"] || "",
         },
         available: true,
-        visitRequests:[]
+        visitRequests: [],
     };
 }
 

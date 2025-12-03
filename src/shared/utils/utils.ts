@@ -1,10 +1,7 @@
 import { Request, Response } from "express";
 import mongoose from "mongoose";
 import { Errors } from "../helper/helper.error";
-import crypto from "crypto";
-
-const ALGO = "aes-256-cbc";
-const IV_LENGTH = 16;
+import CryptoJS from "crypto-js";
 
 export const isValidMongoId = (id: string, res?: Response): boolean => {
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -35,20 +32,29 @@ export const handleApiError = (res: Response, error: unknown): void => {
 };
 
 export const encrypt = (text: string, key: string) => {
-    const iv = crypto.randomBytes(IV_LENGTH);
-    const cipher = crypto.createCipheriv(ALGO, Buffer.from(key, "hex"), iv);
-    let encrypted = cipher.update(text, "utf8", "hex");
-    encrypted += cipher.final("hex");
-    return iv.toString("hex") + ":" + encrypted;
+    const keyHex = CryptoJS.enc.Hex.parse(key);
+    const iv = CryptoJS.lib.WordArray.random(16);
+    const encrypted = CryptoJS.AES.encrypt(CryptoJS.enc.Utf8.parse(text), keyHex, {
+        iv,
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7,
+    });
+    return iv.toString(CryptoJS.enc.Base64) + ":" + encrypted.toString();
 };
 
 export const decrypt = (encryptedText: string, key: string) => {
-    const [ivHex, encrypted] = encryptedText.split(":");
-    const iv = Buffer.from(ivHex, "hex");
-    const decipher = crypto.createDecipheriv(ALGO, Buffer.from(key, "hex"), iv);
-    let decrypted = decipher.update(encrypted, "hex", "utf8");
-    decrypted += decipher.final("utf8");
-    return decrypted;
+    const [ivB64, cipherB64] = encryptedText.split(":");
+
+    const keyHex = CryptoJS.enc.Hex.parse(key);
+    const iv = CryptoJS.enc.Base64.parse(ivB64);
+
+    const bytes = CryptoJS.AES.decrypt(cipherB64, keyHex, {
+        iv,
+        mode: CryptoJS.mode.CBC,
+        padding: CryptoJS.pad.Pkcs7,
+    });
+
+    return bytes.toString(CryptoJS.enc.Utf8);
 };
 
 export const handlePaginationInfo = (req: Request) => {

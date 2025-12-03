@@ -95,6 +95,8 @@ export const requestPasswordReset = async (email: string) => {
 export const resetPassword = async (password: string, data: string) => {
     try {
         const decryptedJSON = decrypt(data, ENCRYPTION_KEY!);
+        if (!decryptedJSON) throw new Errors("Invalid or expired reset link", 400);
+
         const { id, token } = JSON.parse(decryptedJSON);
 
         const user = await UserModel.findOne({ _id: id });
@@ -102,24 +104,18 @@ export const resetPassword = async (password: string, data: string) => {
 
         const secret = JWT_SECRET + user.password;
 
-        const verify = jwt.verify(token, secret);
-        if (!verify || typeof verify !== "object" || !("id" in verify)) {
-            throw new Error("Invalid token payload");
+        let payload;
+        try {
+            payload = jwt.verify(token, secret) as { id: string; email: string };
+        } catch (e) {
+            throw new Errors("Invalid or expired reset token", 400);
         }
+
+        if (payload.id !== user._id.toString()) throw new Errors("Invalid reset token payload", 400);
 
         const encryptedPassword = await bcrypt.hash(password, 10);
 
-        await UserModel.updateOne(
-            {
-                _id: id,
-            },
-            {
-                $set: {
-                    password: encryptedPassword,
-                },
-            },
-        );
-
+        user.password = encryptedPassword;
         await user.save();
     } catch (error) {
         throw error;

@@ -13,6 +13,7 @@ const connectToDatabase = async () => {
         process.exit(1);
     }
 };
+
 const getCollection = async (collectionName: string) => {
     try {
         if (!mongoose.connection || mongoose.connection.readyState !== 1) {
@@ -36,4 +37,4 @@ const getCollection = async (collectionName: string) => {
     }
 };
 
-export { connectToDatabase,getCollection };
+export { connectToDatabase, getCollection };

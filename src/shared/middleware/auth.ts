@@ -6,12 +6,9 @@ import { ObjectId } from "mongodb";
 import { JWT_SECRET } from "../../config/env";
 import { AuthRequest } from "../types/types";
 
-
 export const checkAuthorized = async (req: AuthRequest, res: Response, next: NextFunction) => {
     const headerToken = req.get("authorization");
-    if (!headerToken) {
-        res.status(401).json({ success: false, message: "Unauthorized: JWT token not provided" });
-    }
+    if (!headerToken) return res.status(401).json({ success: false, message: "Unauthorized: JWT token not provided" });
 
     try {
         if (!JWT_SECRET) {
@@ -24,20 +21,14 @@ export const checkAuthorized = async (req: AuthRequest, res: Response, next: Nex
         }
 
         const userCollection = await getCollection("users");
-        if (!userCollection) {
-            res.status(404).json({ success: false, message: "User collection not found!" });
-            return;
-        }
+        if (!userCollection) return res.status(404).json({ success: false, message: "User collection not found!" });
 
         const user = (await userCollection.findOne({ _id: new ObjectId(decoded.id) }, { projection: { password: 0 } })) as unknown as IUserType;
-        if (!user) {
-            res.status(404).json({ message: "User not found" });
-            return;
-        }
+        if (!user) return res.status(404).json({ message: "User not found" });
 
         req.user = user;
         next();
     } catch (err) {
-        res.status(403).json({ success: false, message: "Forbidden: Invalid JWT token" });
+        return res.status(403).json({ success: false, message: "Forbidden: Invalid JWT token" });
     }
 };

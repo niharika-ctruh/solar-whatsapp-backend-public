@@ -3,9 +3,11 @@ import { IHost } from "../types/host.type";
 
 const HostSchema = new Schema<IHost>(
     {
-        hostSseId: { type: String, required: true, 
-           // unique: true // NOTE: undo this after developement
-         },
+        hostSseId: {
+            type: String,
+            required: true,
+            // unique: true // NOTE: undo this after developement
+        },
         name: { type: String, required: true },
         phone: {
             type: String,
@@ -42,9 +44,10 @@ const HostSchema = new Schema<IHost>(
                 },
                 status: {
                     type: String,
-                    enum: ["pending", "accepted", "rejected", "cancelled", "completed"],
+                    enum: ["pending", "accepted", "rejected", "confirmed", "cancelled", "completed"],
                     default: "pending",
                 },
+                responseAt: { type: Date, default: null },
             },
         ],
     },

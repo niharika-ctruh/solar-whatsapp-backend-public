@@ -18,6 +18,7 @@ export interface IHost extends Document {
         // Changed to Array
         requestId: mongoose.Schema.Types.ObjectId;
         status: "pending" | "accepted" | "rejected" | "cancelled" | "completed";
+        responseAt: Date | null;
     }>;
     status: "active" | "inactive";
     createdAt: Date;

@@ -3,16 +3,12 @@ import { z } from "zod";
 
 export const customerSchema = z.object({
     customerId: z.string().min(1, { message: "Customer ID is required" }),
-
     name: z.string().min(3, { message: "Name must be at least 3 characters" }).max(100, { message: "Name must be at most 100 characters" }),
-
     coordinates: z.array(z.number()).length(2, { message: "Coordinates must be an array of exactly 2 numbers [longitude, latitude]" }),
-
     address: z
         .string()
         .min(5, { message: "Address must be at least 5 characters long" })
         .max(200, { message: "Address cannot exceed 200 characters" }),
-
     date: z.iso.datetime({ message: "Date must be a valid ISO 8601 datetime string" }).refine(
         dateStr => {
             const requestDate = new Date(dateStr);
@@ -39,6 +35,5 @@ export const sendRequestValidation = (req: Request, res: Response, next: NextFun
         });
         return;
     }
-
     next();
 };
