@@ -2,7 +2,6 @@ import { NextFunction, Response } from "express";
 import jwt from "jsonwebtoken";
 import { getCollection } from "../db/connect";
 import { IUserType } from "../../modules/auth/types/user";
-import { ObjectId } from "mongodb";
 import { JWT_SECRET } from "../../config/env";
 import { AuthRequest } from "../types/types";
 
@@ -23,7 +22,7 @@ export const checkAuthorized = async (req: AuthRequest, res: Response, next: Nex
         const userCollection = await getCollection("users");
         if (!userCollection) return res.status(404).json({ success: false, message: "User collection not found!" });
 
-        const user = (await userCollection.findOne({ _id: new ObjectId(decoded.id) }, { projection: { password: 0 } })) as unknown as IUserType;
+        const user = (await userCollection.findOne({ _id: decoded.id}, { projection: { password: 0 } })) as unknown as IUserType;
         if (!user) return res.status(404).json({ message: "User not found" });
 
         req.user = user;
